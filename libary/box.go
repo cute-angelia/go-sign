@@ -3,6 +3,7 @@ package libary
 import (
 	"sort"
 	"sync"
+	"log"
 )
 
 var (
@@ -16,7 +17,7 @@ type Rest struct {
 }
 
 type Plug interface {
-	Run(name string) (Rest, error)
+	Run() (Rest, error)
 }
 
 func Register(name string, plug Plug) {
@@ -36,6 +37,18 @@ func unregisterAllDrivers() {
 	defer plugMu.Unlock()
 	// For tests.
 	plugs = make(map[string]Plug)
+}
+
+func Open(name string) (rest Rest, e error) {
+
+	if _, dup := plugs[name]; dup {
+		// ok
+		plug := plugs[name]
+		return plug.Run()
+	} else {
+		log.Print("not found site")
+		return rest, e
+	}
 }
 
 // Drivers returns a sorted list of the names of the registered drivers.
