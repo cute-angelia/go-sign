@@ -49,7 +49,6 @@ func unregisterAllDrivers() {
 }
 
 func Open(name string) (rest Rest, e error) {
-
 	if _, dup := plugs[name]; dup {
 		// ok
 		plug := plugs[name]

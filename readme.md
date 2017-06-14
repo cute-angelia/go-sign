@@ -15,4 +15,4 @@ config site and put file to dir `site` do sign logic
 ````
 
 
-Ps: if `cookie` exits use `cookie` or use `username` and `password` login and sign
+Ps: if config.yaml -> site `cookie` exits use `cookie` or use `username` and `password` login and sign
