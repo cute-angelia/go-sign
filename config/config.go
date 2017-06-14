@@ -1,4 +1,4 @@
-package libary
+package config
 
 import (
 	"github.com/kylelemons/go-gypsy/yaml"

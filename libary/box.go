@@ -1,3 +1,12 @@
+/**
+ * box.go
+ *
+ * @author : Cyw
+ * @email  : rose2099.c@gmail.com
+ * @created: 2017/6/12 下午6:32
+ * @logs   :
+ *
+ */
 package libary
 
 import (
