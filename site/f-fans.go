@@ -38,7 +38,7 @@ func init() {
 	libary.Register(driver.siteName, driver)
 }
 
-func (d FansDriver) Run() (rest libary.Rest, e error) {
+func (d *FansDriver) Run() (rest libary.Rest, e error) {
 	d.iLogin()
 	d.iSign()
 
@@ -47,11 +47,11 @@ func (d FansDriver) Run() (rest libary.Rest, e error) {
 }
 
 /*初始化 formhash */
-func (d FansDriver) initFormhashXq() {
+func (d *FansDriver) initFormhashXq() {
 	iUrl := config.GetItem(d.siteUrl)
 	cookie := d.getCookie()
 
-	urlSign := iUrl + "plugin.php?id=dsu_paulsign:sign&inajax=1"
+	urlSign := iUrl
 
 	http_client := &http.Client{}
 	req, _ := http.NewRequest(
@@ -67,11 +67,28 @@ func (d FansDriver) initFormhashXq() {
 
 	str := string(content)
 
-	d.getFormHash(str)
+	if strings.Contains(str, "登陆") {
+		log.Println("未登陆!", "|getFormHash")
+		return
+	} else {
+		logined = true
+	}
+
+	reg, _ := regexp.Compile(`<input type="hidden" name="formhash" value="(.*?)" />`)
+	result := reg.FindStringSubmatch(str)
+
+	if len(result) == 0 {
+		log.Println("未发现formhash!", "|getFormHash")
+	} else {
+		if len(result) == 2 {
+			d.formHash = result[1]
+			log.Print(d.formHash, "|getFormHash")
+		}
+	}
 }
 
 /*登陆*/
-func (d FansDriver) iLogin() {
+func (d *FansDriver) iLogin() {
 	siteUrl := config.GetItem(d.siteUrl)
 	cookie := d.getCookie()
 	username := config.GetItem(d.siteUserName)
@@ -123,23 +140,17 @@ func (d FansDriver) iLogin() {
 }
 
 /* 签到 */
-func (d FansDriver) iSign() {
+func (d *FansDriver) iSign() {
 	siteUrl := config.GetItem(d.siteUrl)
 	cookie := d.getCookie()
-	urlSign := siteUrl + "/plugin.php?id=dsu_paulsign:sign&operation=qiandao&infloat=1&inajax=1"
+	urlSign := siteUrl + "plugin.php?id=k_misign:sign&operation=qiandao&inajax=1&ajaxtarget=JD_sign&formhash=" + d.formHash
 
-	param := url.Values{
-		"fastreply": {"1"},
-		"formhash":  {formHash},
-		"qdmode":    {"1"},
-		"qdxq":      {qdxq},
-		"todaysay":  {"哈哈我来签到了~"},
-	}
+	//log.Println(urlSign)
 
 	http_client := &http.Client{}
 	req, _ := http.NewRequest(
-		"POST",
-		urlSign, strings.NewReader(param.Encode()))
+		"GET",
+		urlSign, nil)
 
 	req.Header.Set("Origin", siteUrl)
 	req.Header.Set("Cookie", cookie)
@@ -150,10 +161,12 @@ func (d FansDriver) iSign() {
 
 	str := string(content)
 
+	log.Println(str)
+
 	d.isSignSuccess(str)
 }
 
-func (d FansDriver) iSpeak() {
+func (d *FansDriver) iSpeak() {
 	siteUrl := config.GetItem(d.siteUrl)
 	cookie := d.getCookie()
 	urlSign := siteUrl + "/home.php?mod=spacecp&ac=doing&handlekey=doing&inajax=1"
@@ -188,30 +201,7 @@ func (d FansDriver) iSpeak() {
 
 }
 
-/* 获取 formhash */
-func (d FansDriver) getFormHash(content string) {
-	if strings.Contains(content, "登陆") {
-		log.Println("未登陆!", "|getFormHash")
-		return
-	} else {
-		logined = true
-	}
-
-	reg, _ := regexp.Compile(`<input type="hidden" name="formhash" value="(.*?)">`)
-	result := reg.FindStringSubmatch(content)
-
-	if len(result) == 0 {
-		log.Println("已签到!", "|getFormHash")
-	} else {
-		if len(result) == 2 {
-			formHash = result[1]
-			log.Print(formHash, "|getFormHash")
-		}
-	}
-
-}
-
-func (d FansDriver) isSigned(content string) {
+func (d *FansDriver) isSigned(content string) {
 	reg, _ := regexp.Compile(`<input id="(.*?)" type="radio" name="qdxq" value="(.*?)" style="display:none">`)
 	result := reg.FindStringSubmatch(content)
 
@@ -224,7 +214,7 @@ func (d FansDriver) isSigned(content string) {
 	}
 }
 
-func (d FansDriver) isSignSuccess(content string) {
+func (d *FansDriver) isSignSuccess(content string) {
 	if strings.Contains(content, "簽到成功") {
 		log.Println("已经签到!", "|isSignSuccess")
 		signed = true
@@ -233,7 +223,7 @@ func (d FansDriver) isSignSuccess(content string) {
 	}
 }
 
-func (d FansDriver) getCookie() string {
+func (d *FansDriver) getCookie() string {
 	if len(d.iCookie) == 0 {
 		d.iCookie = config.GetItem(d.siteCookie)
 	}
