@@ -85,6 +85,8 @@ func (d *V2exDriver) iGetLogin() {
 		log.Println(error)
 	}
 
+	defer resp.Body.Close()
+
 	content, _ := ioutil.ReadAll(resp.Body)
 
 	str := string(content)
@@ -122,7 +124,10 @@ func (d *V2exDriver) iLogin() {
 
 	if error != nil {
 		log.Println(error)
+		return
 	}
+
+	defer resp.Body.Close()
 
 	curCookies = resp.Cookies()
 
@@ -161,7 +166,10 @@ func (d *V2exDriver) iSign() {
 
 	if error != nil {
 		log.Println(error)
+		return
 	}
+
+	defer resp.Body.Close()
 
 	content, _ := ioutil.ReadAll(resp.Body)
 

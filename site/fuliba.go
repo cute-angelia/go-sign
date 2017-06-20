@@ -83,7 +83,10 @@ func (d *FulibaDriver) iGetFormhash() {
 
 	if error != nil {
 		log.Println(error)
+		return
 	}
+
+	defer resp.Body.Close()
 
 	content, _ := ioutil.ReadAll(resp.Body)
 
@@ -122,7 +125,10 @@ func (d *FulibaDriver) iSign() {
 
 	if error != nil {
 		log.Println(error)
+		return
 	}
+
+	defer resp.Body.Close()
 
 	content, _ := ioutil.ReadAll(resp.Body)
 

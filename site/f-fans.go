@@ -62,7 +62,15 @@ func (d *FansDriver) initFormhashXq() {
 	req.Header.Set("Cookie", cookie)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	resp, _ := http_client.Do(req)
+	resp, err := http_client.Do(req)
+
+	if err != nil {
+		return
+	}
+
+	defer resp.Body.Close()
+
+
 	content, _ := ioutil.ReadAll(resp.Body)
 
 	str := string(content)
@@ -116,7 +124,13 @@ func (d *FansDriver) iLogin() {
 	req.Header.Set("Cookie", cookie)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	resp, _ := http_client.Do(req)
+	resp, err := http_client.Do(req)
+
+	if err != nil {
+		return
+	}
+
+	defer resp.Body.Close()
 
 	curCookies = resp.Cookies()
 
@@ -156,7 +170,14 @@ func (d *FansDriver) iSign() {
 	req.Header.Set("Cookie", cookie)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	resp, _ := http_client.Do(req)
+	resp, err := http_client.Do(req)
+
+	if err != nil {
+		return
+	}
+
+	defer resp.Body.Close()
+
 	content, _ := ioutil.ReadAll(resp.Body)
 
 	str := string(content)
