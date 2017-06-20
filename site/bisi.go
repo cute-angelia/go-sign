@@ -125,7 +125,7 @@ func iSign() {
 		"fastreply": {"1"},
 		"formhash":  {formHash},
 		"qdmode":    {"1"},
-		"qdxq":      {qdxq},
+		"qdxq":      {"shuai"},
 		"todaysay":  {"哈哈我来签到了~"},
 	}
 
@@ -142,6 +142,9 @@ func iSign() {
 	content, _ := ioutil.ReadAll(resp.Body)
 
 	str := string(content)
+
+
+	log.Println(str)
 
 	isSignSuccess(str)
 }
@@ -211,9 +214,6 @@ func isSigned(content string) {
 	if len(result) == 0 {
 		log.Println("已经签到!", "|isSigned")
 		signed = true
-	} else {
-		//log.Print(result)
-		qdxq = result[2]
 	}
 }
 
