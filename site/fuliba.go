@@ -134,6 +134,6 @@ func (d *FulibaDriver) iSign() {
 	if len(result) == 0 {
 		log.Println("formhash not found!")
 	} else {
-		log.Println("第" + result[1] + "个签到!")
+		log.Println(d.configSiteName + ": 第" + result[1] + "个签到!")
 	}
 }
