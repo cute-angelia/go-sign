@@ -1,8 +1,30 @@
 bisi:
-  title: discuz
-  url: http://discuz.com/
+  title: demo1
+  url: http://xxxxxxx.com
   username:
   password:
   cookie:
+  type: discuz
+
+f-fans:
+    title: demo2
+    url:
+    username:
+    password:
+    cookie:
+    type: discuz
+
+v2ex:
+    title: V2EX
+    url: https://www.v2ex.com/
+    username:
+    password:
+    cookie:
+
+fuliba:
+    title: demo3
+    url:
+    host:
+    cookie:
 
 cat: 🐈
