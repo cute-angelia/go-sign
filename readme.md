@@ -12,6 +12,8 @@ cp config.example.yaml config.yaml
 
 config site and put file to dir `site` do sign logic
 
+go run main.go sitename sitename2
+
 ````
 
 
