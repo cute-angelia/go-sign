@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+	iconv "github.com/djimenez/iconv-go"
 )
 
 type FulibaDriver struct {
@@ -132,7 +133,11 @@ func (d *FulibaDriver) iSign() {
 
 	content, _ := ioutil.ReadAll(resp.Body)
 
-	str := string(content)
+	out := make([]byte, len(content))
+	out = out[:]
+	iconv.Convert(content, out, "gb2312", "utf-8")
+
+	str := string(out)
 
 	pattern, _ := regexp.Compile("<i>(.*?)</i>")
 	result := pattern.FindStringSubmatch(str)
