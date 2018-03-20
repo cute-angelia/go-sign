@@ -13,12 +13,14 @@ import (
 	"flag"
 	"go-sign/libary"
 	_ "go-sign/site"
+	"log"
 )
 
 func main() {
 	flag.Parse()
 
 	for _, site := range flag.Args() {
+		log.Print(site, " site")
 		libary.Open(site)
 	}
 }

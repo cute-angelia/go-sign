@@ -160,6 +160,7 @@ func (d *FansDriver) iSign() {
 	urlSign := siteUrl + "plugin.php?id=k_misign:sign&operation=qiandao&inajax=1&ajaxtarget=JD_sign&formhash=" + d.formHash
 
 	//log.Println(urlSign)
+	// http://www.f-fans.club/plugin.php?id=dc_signin:sign&inajax=1
 
 	http_client := &http.Client{}
 	req, _ := http.NewRequest(
